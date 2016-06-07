@@ -36,20 +36,18 @@
 -(void)resetBoard
 {
     [self.board removeAllObjects];
-    self.board = [@[[@[@"", @"", @""] mutableCopy],
-                    [@[@"", @"", @""] mutableCopy],
-                    [@[@"", @"", @""] mutableCopy]] mutableCopy];
+    self.board = [@[@"", @"", @"", @"", @"", @"", @"", @"", @""] mutableCopy];
 
 }
 
 -(NSString *)playerAtColumn:(NSUInteger)column row:(NSUInteger)row
 {
-    return self.board[column][row];
+    return self.board[column * 3 + row];
 }
 
 -(BOOL)canPlayAtColumn:(NSUInteger)column row:(NSUInteger)row
 {
-    if (!([self.board[column][row]  isEqualToString:@""])) {
+    if (!([self.board[column * 3 + row]  isEqualToString:@""])) {
         return NO;
     }
     
@@ -58,54 +56,91 @@
 
 -(void)playXAtColumn:(NSUInteger)column row:(NSUInteger)row
 {
-    [self.board[column] replaceObjectAtIndex:row withObject:@"X"];
+    self.board[column * 3 + row] = @"X";
 }
 
 -(void)playOAtColumn:(NSUInteger)column row:(NSUInteger)row
 {
-    [self.board[column] replaceObjectAtIndex:row withObject:@"O"];
+    self.board[column * 3 + row] = @"O";
+}
+
+
+-(NSString *)horizontalWin {
+    
+    if ([self.board[0] isEqualToString:self.board[1]] && [self.board[1] isEqualToString:self.board[2]]) {
+        return self.board[0];
+    }
+    
+    else if ([self.board[3] isEqualToString:self.board[4]] && [self.board[4] isEqualToString:self.board[5]]) {
+        return self.board[3];
+    }
+    
+    else if ([self.board[6] isEqualToString:self.board[7]] && [self.board[7] isEqualToString:self.board[8]]) {
+        return self.board[6];
+    }
+    
+    return @"";
+}
+
+-(NSString *)verticalWin {
+    if ([self.board[0] isEqualToString:self.board[3]] && [self.board[3] isEqualToString:self.board[6]]) {
+        return self.board[0];
+    }
+    
+    else if ([self.board[1] isEqualToString:self.board[4]] && [self.board[4] isEqualToString:self.board[7]]) {
+        return self.board[1];
+    }
+    
+    else if ([self.board[2] isEqualToString:self.board[5]] && [self.board[5] isEqualToString:self.board[8]]) {
+        return self.board[2];
+    }
+    
+    return @"";
+}
+
+-(NSString *)diagonalWin {
+    if ([self.board[0] isEqualToString:self.board[4]] && [self.board[4] isEqualToString:self.board[8]]) {
+        return self.board[0];
+    }
+    
+    else if ([self.board[6] isEqualToString:self.board[4]] && [self.board[4] isEqualToString:self.board[2]]) {
+        return self.board[6];
+    }
+    
+    return @"";
 }
 
 -(NSString *)winningPlayer {
     
-    for (NSUInteger i = 0; i < [self.board count]; i++) {
-        
-        //vert win
-        if (![self.board[i][1] isEqualToString:@""] && [self.board[i][1] isEqualToString:self.board[i][0]] && [self.board[i][1] isEqualToString:self.board[i][2]]) {
-            return self.board[i][1] ;
-        }
-        
-        //hori win
-        if (![self.board[0][i] isEqualToString:@""] && [self.board[0][i] isEqualToString:self.board[1][i]] && [self.board[0][i] isEqualToString:self.board[2][i]]) {
-            return self.board[0][i];
-        }
+    NSString *win;
+    win = [self horizontalWin];
+    if ([win length]) {
+        return win;
     }
     
-    //diag win
-    if ([self.board[0][0] isEqualToString:self.board[1][1]] && [self.board[0][0] isEqualToString:self.board[2][2]] ) {
-        return self.board[0][0];
+    win = [self verticalWin];
+    if ([win length]) {
+        return win;
     }
     
-    if ([self.board[0][2] isEqualToString:self.board[1][1]] && [self.board[0][2] isEqualToString:self.board[2][0]] ) {
-        return self.board[0][2];
+    win = [self diagonalWin];
+    if ([win length]) {
+        return win;
     }
     
-
-    return @"";
+    return win;
 
 }
 
 -(BOOL)isADraw
 {
-    for (NSUInteger i = 0; i < [self.board count]; i++) {
-        
-        for (NSUInteger j = 0; i < [self.board count]; j++) {
-            if (![self.board[i][j] isEqualToString:@"@"]) {
-                return YES;
-            }
+    for (NSString *currentBoardString in self.board) {
+        if ([currentBoardString length] == 0) {
+            return NO;
         }
     }
-    return NO;
+    
+    return YES;
 }
 
 @end
