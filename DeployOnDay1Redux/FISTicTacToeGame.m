@@ -67,22 +67,6 @@
 
 -(NSString *)horizontalWin {
     
-    if ([self.board[0] isEqualToString:self.board[1]] && [self.board[1] isEqualToString:self.board[2]]) {
-        return self.board[0];
-    }
-    
-    else if ([self.board[3] isEqualToString:self.board[4]] && [self.board[4] isEqualToString:self.board[5]]) {
-        return self.board[3];
-    }
-    
-    else if ([self.board[6] isEqualToString:self.board[7]] && [self.board[7] isEqualToString:self.board[8]]) {
-        return self.board[6];
-    }
-    
-    return @"";
-}
-
--(NSString *)verticalWin {
     if ([self.board[0] isEqualToString:self.board[3]] && [self.board[3] isEqualToString:self.board[6]]) {
         return self.board[0];
     }
@@ -93,6 +77,22 @@
     
     else if ([self.board[2] isEqualToString:self.board[5]] && [self.board[5] isEqualToString:self.board[8]]) {
         return self.board[2];
+    }
+    
+    return @"";
+}
+
+-(NSString *)verticalWin {
+    if ([self.board[0] isEqualToString:self.board[1]] && [self.board[1] isEqualToString:self.board[2]]) {
+        return self.board[0];
+    }
+    
+    else if ([self.board[3] isEqualToString:self.board[4]] && [self.board[4] isEqualToString:self.board[5]]) {
+        return self.board[3];
+    }
+    
+    else if ([self.board[6] isEqualToString:self.board[7]] && [self.board[7] isEqualToString:self.board[8]]) {
+        return self.board[6];
     }
     
     return @"";
